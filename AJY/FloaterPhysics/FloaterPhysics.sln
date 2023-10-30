@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33829.357
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FloaterPhysics", "FloaterPhysics\FloaterPhysics.vcxproj", "{20E6AA1B-8E69-4825-8B54-825BF3E255DF}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0BB76C52-C35F-4A26-88E7-04920C2B5DBE} = {0BB76C52-C35F-4A26-88E7-04920C2B5DBE}
+		{CB145F87-3FE0-445E-BB70-582B466CBE74} = {CB145F87-3FE0-445E-BB70-582B466CBE74}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FloaterMath", "..\..\JYH\Floater\FloaterMath\FloaterMath.vcxproj", "{0BB76C52-C35F-4A26-88E7-04920C2B5DBE}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FloaterUtil", "..\..\JYH\Floater\FloaterUtil\FloaterUtil.vcxproj", "{CB145F87-3FE0-445E-BB70-582B466CBE74}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{20E6AA1B-8E69-4825-8B54-825BF3E255DF}.Debug|x64.ActiveCfg = Debug|x64
+		{20E6AA1B-8E69-4825-8B54-825BF3E255DF}.Debug|x64.Build.0 = Debug|x64
+		{20E6AA1B-8E69-4825-8B54-825BF3E255DF}.Debug|x86.ActiveCfg = Debug|Win32
+		{20E6AA1B-8E69-4825-8B54-825BF3E255DF}.Debug|x86.Build.0 = Debug|Win32
+		{20E6AA1B-8E69-4825-8B54-825BF3E255DF}.Release|x64.ActiveCfg = Release|x64
+		{20E6AA1B-8E69-4825-8B54-825BF3E255DF}.Release|x64.Build.0 = Release|x64
+		{20E6AA1B-8E69-4825-8B54-825BF3E255DF}.Release|x86.ActiveCfg = Release|Win32
+		{20E6AA1B-8E69-4825-8B54-825BF3E255DF}.Release|x86.Build.0 = Release|Win32
+		{0BB76C52-C35F-4A26-88E7-04920C2B5DBE}.Debug|x64.ActiveCfg = Debug|x64
+		{0BB76C52-C35F-4A26-88E7-04920C2B5DBE}.Debug|x64.Build.0 = Debug|x64
+		{0BB76C52-C35F-4A26-88E7-04920C2B5DBE}.Debug|x86.ActiveCfg = Debug|Win32
+		{0BB76C52-C35F-4A26-88E7-04920C2B5DBE}.Debug|x86.Build.0 = Debug|Win32
+		{0BB76C52-C35F-4A26-88E7-04920C2B5DBE}.Release|x64.ActiveCfg = Release|x64
+		{0BB76C52-C35F-4A26-88E7-04920C2B5DBE}.Release|x64.Build.0 = Release|x64
+		{0BB76C52-C35F-4A26-88E7-04920C2B5DBE}.Release|x86.ActiveCfg = Release|Win32
+		{0BB76C52-C35F-4A26-88E7-04920C2B5DBE}.Release|x86.Build.0 = Release|Win32
+		{CB145F87-3FE0-445E-BB70-582B466CBE74}.Debug|x64.ActiveCfg = Debug|x64
+		{CB145F87-3FE0-445E-BB70-582B466CBE74}.Debug|x64.Build.0 = Debug|x64
+		{CB145F87-3FE0-445E-BB70-582B466CBE74}.Debug|x86.ActiveCfg = Debug|Win32
+		{CB145F87-3FE0-445E-BB70-582B466CBE74}.Debug|x86.Build.0 = Debug|Win32
+		{CB145F87-3FE0-445E-BB70-582B466CBE74}.Release|x64.ActiveCfg = Release|x64
+		{CB145F87-3FE0-445E-BB70-582B466CBE74}.Release|x64.Build.0 = Release|x64
+		{CB145F87-3FE0-445E-BB70-582B466CBE74}.Release|x86.ActiveCfg = Release|Win32
+		{CB145F87-3FE0-445E-BB70-582B466CBE74}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E873E911-B597-4231-90D5-AC47ECC5081C}
+	EndGlobalSection
+EndGlobal

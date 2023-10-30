@@ -1,0 +1,163 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Analyzer">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="ReflectedObject">
+      <UniqueIdentifier>{4a246e38-4b84-448a-bd2a-0752440cd7ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ReflectedObject\ReflectedMember">
+      <UniqueIdentifier>{d873c35e-3628-49d7-8655-393881d78ffe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ReflectedObject\ReflectedMember\DataMember">
+      <UniqueIdentifier>{bbe8e064-9706-463a-9608-c10c4551e70b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ReflectedObject\ReflectedMember\Macro">
+      <UniqueIdentifier>{5c6819ab-998a-42b4-b7cd-e0e0c0c6484f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ReflectedObject\ReflectedMember\Macro\Factory">
+      <UniqueIdentifier>{3dd0cf30-eb6e-4367-8b60-72915d2c61b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ReflectedObject\ReflectedMember\DataMember\Factory">
+      <UniqueIdentifier>{a35350a1-cffe-46b6-b769-d3687f8d1e92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ReflectedObject\ReflectedMember\Macro\Atrributes">
+      <UniqueIdentifier>{7cd77da1-4146-4718-a606-3ffe5aadce5e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ReflectedObject\ReflectedMember\Macro\Asset">
+      <UniqueIdentifier>{fc054b60-f28d-44d9-b1d6-eefdc49fb222}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ReflectedObject\ReflectedMember\MemberFunction">
+      <UniqueIdentifier>{f2f8d02c-e110-40f3-8da6-c8717cc26743}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="CppClassAnalyzer.cpp">
+      <Filter>Analyzer</Filter>
+    </ClCompile>
+    <ClCompile Include="MacroFactory.cpp">
+      <Filter>ReflectedObject\ReflectedMember\Macro\Factory</Filter>
+    </ClCompile>
+    <ClCompile Include="EnumDataMember.cpp">
+      <Filter>ReflectedObject\ReflectedMember\DataMember</Filter>
+    </ClCompile>
+    <ClCompile Include="DataMember.cpp">
+      <Filter>ReflectedObject\ReflectedMember\DataMember</Filter>
+    </ClCompile>
+    <ClCompile Include="PointerDataMember.cpp">
+      <Filter>ReflectedObject\ReflectedMember\DataMember</Filter>
+    </ClCompile>
+    <ClCompile Include="PrimitiveDataMember.cpp">
+      <Filter>ReflectedObject\ReflectedMember\DataMember</Filter>
+    </ClCompile>
+    <ClCompile Include="EnumType.cpp">
+      <Filter>ReflectedObject\ReflectedMember</Filter>
+    </ClCompile>
+    <ClCompile Include="Macro.cpp">
+      <Filter>ReflectedObject\ReflectedMember\Macro</Filter>
+    </ClCompile>
+    <ClCompile Include="ReflectedClass.cpp">
+      <Filter>ReflectedObject</Filter>
+    </ClCompile>
+    <ClCompile Include="ReflectedMember.cpp">
+      <Filter>ReflectedObject\ReflectedMember</Filter>
+    </ClCompile>
+    <ClCompile Include="DataMemberFactory.cpp">
+      <Filter>ReflectedObject\ReflectedMember\DataMember\Factory</Filter>
+    </ClCompile>
+    <ClCompile Include="ReadOnlyMacro.cpp">
+      <Filter>ReflectedObject\ReflectedMember\Macro\Atrributes</Filter>
+    </ClCompile>
+    <ClCompile Include="SerializeFieldMacro.cpp">
+      <Filter>ReflectedObject\ReflectedMember\Macro\Atrributes</Filter>
+    </ClCompile>
+    <ClCompile Include="DefaultValueMacro.cpp">
+      <Filter>ReflectedObject\ReflectedMember\Macro\Atrributes</Filter>
+    </ClCompile>
+    <ClCompile Include="HideInInspectorMacro.cpp">
+      <Filter>ReflectedObject\ReflectedMember\Macro\Atrributes</Filter>
+    </ClCompile>
+    <ClCompile Include="AttributeMacro.cpp">
+      <Filter>ReflectedObject\ReflectedMember\Macro\Atrributes</Filter>
+    </ClCompile>
+    <ClCompile Include="AssetIconMacro.cpp">
+      <Filter>ReflectedObject\ReflectedMember\Macro\Asset</Filter>
+    </ClCompile>
+    <ClCompile Include="AssetMenuMacro.cpp">
+      <Filter>ReflectedObject\ReflectedMember\Macro\Asset</Filter>
+    </ClCompile>
+    <ClCompile Include="AssetTypeMacro.cpp">
+      <Filter>ReflectedObject\ReflectedMember\Macro\Asset</Filter>
+    </ClCompile>
+    <ClCompile Include="AssetBuildIndexMacro.cpp">
+      <Filter>ReflectedObject\ReflectedMember\Macro\Asset</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CppClassAnalyzer.h">
+      <Filter>Analyzer</Filter>
+    </ClInclude>
+    <ClInclude Include="MacroFactory.h">
+      <Filter>ReflectedObject\ReflectedMember\Macro\Factory</Filter>
+    </ClInclude>
+    <ClInclude Include="EnumDataMember.h">
+      <Filter>ReflectedObject\ReflectedMember\DataMember</Filter>
+    </ClInclude>
+    <ClInclude Include="DataMember.h">
+      <Filter>ReflectedObject\ReflectedMember\DataMember</Filter>
+    </ClInclude>
+    <ClInclude Include="PointerDataMember.h">
+      <Filter>ReflectedObject\ReflectedMember\DataMember</Filter>
+    </ClInclude>
+    <ClInclude Include="PrimitiveDataMember.h">
+      <Filter>ReflectedObject\ReflectedMember\DataMember</Filter>
+    </ClInclude>
+    <ClInclude Include="ReflectedObject.h">
+      <Filter>ReflectedObject</Filter>
+    </ClInclude>
+    <ClInclude Include="EnumType.h">
+      <Filter>ReflectedObject\ReflectedMember</Filter>
+    </ClInclude>
+    <ClInclude Include="Macro.h">
+      <Filter>ReflectedObject\ReflectedMember\Macro</Filter>
+    </ClInclude>
+    <ClInclude Include="ReflectedClass.h">
+      <Filter>ReflectedObject</Filter>
+    </ClInclude>
+    <ClInclude Include="ReflectedMember.h">
+      <Filter>ReflectedObject\ReflectedMember</Filter>
+    </ClInclude>
+    <ClInclude Include="DataMemberFactory.h">
+      <Filter>ReflectedObject\ReflectedMember\DataMember\Factory</Filter>
+    </ClInclude>
+    <ClInclude Include="ReadOnlyMacro.h">
+      <Filter>ReflectedObject\ReflectedMember\Macro\Atrributes</Filter>
+    </ClInclude>
+    <ClInclude Include="SerializeFieldMacro.h">
+      <Filter>ReflectedObject\ReflectedMember\Macro\Atrributes</Filter>
+    </ClInclude>
+    <ClInclude Include="DefaultValueMacro.h">
+      <Filter>ReflectedObject\ReflectedMember\Macro\Atrributes</Filter>
+    </ClInclude>
+    <ClInclude Include="HideInInspectorMacro.h">
+      <Filter>ReflectedObject\ReflectedMember\Macro\Atrributes</Filter>
+    </ClInclude>
+    <ClInclude Include="AttributeMacro.h">
+      <Filter>ReflectedObject\ReflectedMember\Macro\Atrributes</Filter>
+    </ClInclude>
+    <ClInclude Include="AssetIconMacro.h">
+      <Filter>ReflectedObject\ReflectedMember\Macro\Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="AssetMenuMacro.h">
+      <Filter>ReflectedObject\ReflectedMember\Macro\Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="AssetTypeMacro.h">
+      <Filter>ReflectedObject\ReflectedMember\Macro\Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="AssetBuildIndexMacro.h">
+      <Filter>ReflectedObject\ReflectedMember\Macro\Asset</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

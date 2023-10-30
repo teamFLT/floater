@@ -1,0 +1,127 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Fundamentals">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Systems">
+      <UniqueIdentifier>{c977da91-f41e-4f6c-bf76-92e5aff07da7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fundamentals\Manager">
+      <UniqueIdentifier>{ac00b6db-f13f-49be-9428-550ce9a8e346}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main">
+      <UniqueIdentifier>{0534c56d-1148-403a-bef0-db567df5b097}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fundamentals\Reflection">
+      <UniqueIdentifier>{62f43713-6a52-41db-8c84-bd18eafc0465}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fundamentals\Reflection\FProperty">
+      <UniqueIdentifier>{50a362fe-3f23-475d-80f7-9762a5ae134b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fundamentals\Reflection\FDelegate">
+      <UniqueIdentifier>{fa2f2e78-d729-4673-9205-00e4b7066c43}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="BaseObject.cpp">
+      <Filter>Fundamentals</Filter>
+    </ClCompile>
+    <ClCompile Include="Component.cpp">
+      <Filter>Fundamentals</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Fundamentals</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform.cpp">
+      <Filter>Fundamentals</Filter>
+    </ClCompile>
+    <ClCompile Include="Behaviour.cpp">
+      <Filter>Fundamentals</Filter>
+    </ClCompile>
+    <ClCompile Include="MonoBehaviour.cpp">
+      <Filter>Fundamentals</Filter>
+    </ClCompile>
+    <ClCompile Include="Core.cpp">
+      <Filter>Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjectManager.cpp">
+      <Filter>Fundamentals\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>Fundamentals\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>Fundamentals</Filter>
+    </ClCompile>
+    <ClCompile Include="FDelegate.cpp">
+      <Filter>Fundamentals\Reflection\FDelegate</Filter>
+    </ClCompile>
+    <ClCompile Include="FProperty.cpp">
+      <Filter>Fundamentals\Reflection\FProperty</Filter>
+    </ClCompile>
+    <ClCompile Include="Input.cpp">
+      <Filter>Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphic.cpp">
+      <Filter>Systems</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="GameObject.h">
+      <Filter>Fundamentals</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseObject.h">
+      <Filter>Fundamentals</Filter>
+    </ClInclude>
+    <ClInclude Include="Component.h">
+      <Filter>Fundamentals</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform.h">
+      <Filter>Fundamentals</Filter>
+    </ClInclude>
+    <ClInclude Include="Behaviour.h">
+      <Filter>Fundamentals</Filter>
+    </ClInclude>
+    <ClInclude Include="MonoBehaviour.h">
+      <Filter>Fundamentals</Filter>
+    </ClInclude>
+    <ClInclude Include="Core.h">
+      <Filter>Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjectManager.h">
+      <Filter>Fundamentals\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Define.h">
+      <Filter>Fundamentals</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager.h">
+      <Filter>Fundamentals\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Fundamentals</Filter>
+    </ClInclude>
+    <ClInclude Include="FloaterEngine.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="FDelegate.h">
+      <Filter>Fundamentals\Reflection\FDelegate</Filter>
+    </ClInclude>
+    <ClInclude Include="FProperty.h">
+      <Filter>Fundamentals\Reflection\FProperty</Filter>
+    </ClInclude>
+    <ClInclude Include="IProperty.h">
+      <Filter>Fundamentals\Reflection\FProperty</Filter>
+    </ClInclude>
+    <ClInclude Include="Input.h">
+      <Filter>Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphic.h">
+      <Filter>Systems</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
