@@ -1,5 +1,7 @@
 #include "RendererDX11.h"
 #include "../FloaterUtil/include/FloaterMacro.h"
+#include "DX11VSConstantBuffer.h"
+#include "DX11PixelShader.h"
 
 #include <DirectXColors.h>
 
@@ -10,6 +12,7 @@
 
 #pragma comment(lib, "DXGI.lib")
 #pragma comment(lib, "D3D11.lib")
+#pragma comment(lib, "D3DCompiler.lib")
 
 
 bool flt::RendererDX11::Initialize(HWND hwnd)
@@ -178,6 +181,22 @@ bool flt::RendererDX11::Render(float deltaTime)
 	_immediateContext->ClearDepthStencilView(_depthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 	//g_immediateContext->OMSetRenderTargets(1, g_renderTargetView.GetAddressOf(), g_depthStencilView.Get());
 
+
+	for (auto& node : _renderableObjects)
+	{
+		Mesh*& mesh = node->mesh;
+
+		if (node->mesh)
+		{
+			continue;
+		}
+
+		// 렌더링
+
+
+	}
+
+
 	// 수직동기화 여부에 따라서 present
 	if (_useVsync)
 	{
@@ -189,6 +208,11 @@ bool flt::RendererDX11::Render(float deltaTime)
 	}
 
 	return true;
+}
+
+bool flt::RendererDX11::Test()
+{
+	return false;
 }
 
 bool flt::RendererDX11::Resize(unsigned __int32 windowWidth, unsigned __int32 windowHeight)
@@ -382,6 +406,49 @@ bool flt::RendererDX11::OnResize()
 	// 테스트를 위한 배경 색상 변경
 	float bgColor[4] = { 0.0f, 0.0f, 1.0f, 1.0f };
 	_immediateContext->ClearRenderTargetView(_renderTargetView.Get(), bgColor);
+
+	return true;
+}
+
+void flt::RendererDX11::RenderSingleNodeRecursive(Node* node, const Matrix4f& parentMatrix)
+{
+	Matrix4f worldMatrix = node->transform.GetMatrix4f() * parentMatrix;
+	Matrix4f viewProjMatrix = Matrix4f::Identity();
+
+	for (auto& [name, child] :node->children)
+	{
+		RenderSingleNodeRecursive(child, worldMatrix);
+	}
+
+	if (!node->mesh)
+	{
+		return;
+	}
+
+// 렌더링
+	VSConstantBuffer vsConstantBuffer
+	{
+		ConvXMMatrix(worldMatrix),
+		ConvXMMatrix(worldMatrix.Inverse().Transpose()),
+		ConvXMMatrix(viewProjMatrix),
+		ConvXMMatrix(worldMatrix * viewProjMatrix)
+	};
+}
+
+bool flt::RendererDX11::SetVsConstantBuffer(ID3D11Buffer* vsConstantBuffer, void* pData, size_t dataSize, UINT slot)
+{
+	D3D11_MAPPED_SUBRESOURCE mappedResource;
+	HRESULT hResult = _immediateContext->Map(vsConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+
+	if(hResult != S_OK)
+	{
+		return false;
+	}
+
+	memcpy(mappedResource.pData, pData, dataSize);
+	_immediateContext->Unmap(vsConstantBuffer, 0);
+
+	_immediateContext->VSSetConstantBuffers(slot, 1, &vsConstantBuffer);
 
 	return true;
 }

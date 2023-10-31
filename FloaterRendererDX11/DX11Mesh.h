@@ -1,8 +1,8 @@
 #pragma once
 #include <d3d11.h>
-#include "../FloaterMath/include/Vector2f.h"
-#include "../FloaterMath/include/Vector3f.h"
-#include "../FloaterMath/include/Vector4f.h"
+#include "CommonMath.h"
+#include "../FloaterRendererCommon/include/IBuilder.h"
+#include "../FloaterRendererCommon/include/Resource.h"
 
 namespace flt
 {
@@ -26,10 +26,24 @@ namespace flt
 
 	struct Mesh
 	{
+		ID3D11ShaderResourceView* texture;
+		ID3D11SamplerState* sampler;
+
+
 		ID3D11Buffer* vertexBuffer;
 		size_t singleVertexSize;
 		ID3D11Buffer* indexBuffer;
 		size_t indexCount;
 	};
 
+	template struct Resource<Mesh>;
+
+	struct MeshBuilder : public IBuilder<Mesh>
+	{
+		MeshBuilder(const std::wstring name) : IBuilder<Mesh>(name), pDevice(nullptr) {}
+
+		virtual void* build(ResourceMgr& _resourceMgr) const override;
+
+		ID3D11Device* pDevice;
+	};
 }

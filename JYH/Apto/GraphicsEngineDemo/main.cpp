@@ -20,7 +20,7 @@ int main()
 	//SetConsoleOutputCP(CP_UTF8);
 	//std::locale loc = std::wcout.imbue(std::locale("korean"));
 	//setlocale(LC_ALL, "korean");
-	_wsetlocale(LC_ALL, L"korean");
+	//_wsetlocale(LC_ALL, L"korean");
 #endif
 	
 	std::string str = "테스트";

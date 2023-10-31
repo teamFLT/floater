@@ -1,12 +1,15 @@
 #pragma once
 #include <string>
+#include "../../FloaterUtil/include/ConvString.h"
 
 namespace flt
 {
+	class ResourceMgr;
+
 	struct IBuilderBase
 	{
 		IBuilderBase(const std::wstring& key) : key(key) {}
-		virtual void* operator()(std::wstring* typeName) const = 0;
+		virtual void* operator()(std::wstring* typeName, ResourceMgr& _resourceMgr) const = 0;
 		std::wstring key;
 	};
 
@@ -16,13 +19,13 @@ namespace flt
 		using type = Derived;
 
 		IBuilder(const std::wstring& key) : IBuilderBase(key) {}
-		virtual void* operator()(std::wstring* typeName) const final
+		virtual void* operator()(std::wstring* typeName, ResourceMgr& _resourceMgr) const final
 		{
-			*typeName = typeid(Derived).name();
+			*typeName = convToWstring(typeid(Derived).name());
 
-			return build();
+			return build(_resourceMgr);
 		}
 
-		virtual void* build() const = 0;
+		virtual void* build(ResourceMgr& _resourceMgr) const = 0;
 	};
 }

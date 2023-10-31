@@ -13,7 +13,24 @@ namespace flt
 	{
 		friend class ResourceMgr;
 
-		ResourceBase(ResourceMgr& resourceMgr, const IBuilderBase& builder);
+		ResourceBase(const ResourceBase& other) = delete;
+
+		ResourceBase(ResourceBase&& other) noexcept : 
+			_resourceMgr(other._resourceMgr), 
+			_data(other._data), 
+			_key(other._key)
+		{
+			other._data = nullptr;
+		}
+
+		ResourceBase(ResourceMgr& resourceMgr, const IBuilderBase& builder)	: 
+			_resourceMgr(resourceMgr),
+			_key(),
+			_data(nullptr)
+		{
+			_data = _resourceMgr.GetResource(this, builder);
+		}
+
 
 		virtual ~ResourceBase()
 		{
@@ -29,7 +46,13 @@ namespace flt
 	struct Resource : ResourceBase
 	{
 	public:
-		Resource(const typename IBuilder<Derived>& builder) : ResourceBase(builder) {}
+		Resource(ResourceMgr& resourceMgr, const typename IBuilder<Derived>& builder) : ResourceBase(resourceMgr, builder) {}
+		Resource(const Resource& other) = delete;
+		Resource(Resource&& other) = default;
+		virtual ~Resource()
+		{
+			Release();
+		}
 
 		void Release()
 		{

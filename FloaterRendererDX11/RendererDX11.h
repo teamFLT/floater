@@ -1,6 +1,7 @@
 #pragma once
 #include "../FloaterRendererCommon/include/IRenderer.h"
 #include "../FloaterRendererCommon/include/ResourceMgr.h"
+#include "CommonMath.h"
 #include "Node.h"
 
 #include <windows.h>
@@ -30,6 +31,7 @@ namespace flt
 		virtual bool RegisterObject(Renderable& renderable) { return false; };
 		virtual bool DeregisterObject(Renderable& renderable) { return false; };
 
+		virtual bool Test() override;
 	public:
 		bool Resize(unsigned __int32 windowWidth, unsigned __int32 windowHeight);
 
@@ -37,6 +39,10 @@ namespace flt
 		bool InitDisplayInfo();
 		bool InitGPUInfo();
 		bool OnResize();
+
+		void RenderSingleNodeRecursive(Node* node, const Matrix4f& parentMatrix);
+
+		bool SetVsConstantBuffer(ID3D11Buffer* vsConstantBuffer, void* pData, size_t dataSize, UINT slot);
 
 	private:
 		HWND _hwnd;

@@ -9,6 +9,9 @@ namespace flt
 	struct ResourceBase;
 	struct IBuilderBase;
 
+	//extern template class __declspec(dllexport) std::wstring;
+
+
 	class ResourceMgr
 	{
 	public:
@@ -62,4 +65,6 @@ namespace flt
 		std::unordered_map<std::wstring, ManagedData> resources;
 		std::mutex mutex;
 	};
+
+	//extern template class __declspec(dllexport) std::unordered_map< std::wstring, ResourceMgr::ManagedData>;
 }

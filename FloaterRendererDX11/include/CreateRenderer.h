@@ -15,4 +15,3 @@ namespace flt
 	extern "C" FLT_RENDERER IRenderer* CreateRendererDX11(HWND hwnd);
 	extern "C" FLT_RENDERER IRenderer* CreateRendererDX12(HWND hwnd);
 }
-
