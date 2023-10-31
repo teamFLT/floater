@@ -13,24 +13,31 @@ namespace flt
 	{
 		friend class ResourceMgr;
 
-		ResourceBase(const ResourceBase& other) = delete;
+		ResourceBase(ResourceMgr& resourceMgr)	: 
+			_pResourceMgr(&resourceMgr),
+			_key(),
+			_pData(nullptr)
+		{
 
+		}
+		ResourceBase(const ResourceBase& other) = delete;
 		ResourceBase(ResourceBase&& other) noexcept : 
-			_resourceMgr(other._resourceMgr), 
-			_data(other._data), 
+			_pResourceMgr(other._pResourceMgr), 
+			_pData(other._pData), 
 			_key(other._key)
 		{
-			other._data = nullptr;
+			other._pData = nullptr;
 		}
 
-		ResourceBase(ResourceMgr& resourceMgr, const IBuilderBase& builder)	: 
-			_resourceMgr(resourceMgr),
-			_key(),
-			_data(nullptr)
+		ResourceBase& operator=(const ResourceBase& other) = delete;
+		ResourceBase& operator=(ResourceBase&& other) noexcept
 		{
-			_data = _resourceMgr.GetResource(this, builder);
+			_pResourceMgr = other._pResourceMgr;
+			_pData = other._pData;
+			_key = other._key;
+			other._pData = nullptr;
+			return *this;
 		}
-
 
 		virtual ~ResourceBase()
 		{
@@ -38,37 +45,55 @@ namespace flt
 
 	protected:
 		std::wstring _key;
-		void* _data;
-		ResourceMgr& _resourceMgr;
+		void* _pData;
+		ResourceMgr* _pResourceMgr;
 	};
 
 	template<typename Derived>
 	struct Resource : ResourceBase
 	{
 	public:
-		Resource(ResourceMgr& resourceMgr, const typename IBuilder<Derived>& builder) : ResourceBase(resourceMgr, builder) {}
+		Resource(ResourceMgr& resourceMgr, const typename IBuilder<Derived>& builder) : ResourceBase(resourceMgr) 
+		{
+			SetData(builder);
+		}
 		Resource(const Resource& other) = delete;
 		Resource(Resource&& other) = default;
+
+		Resource& operator=(const Resource& other) = delete;
+		Resource& operator=(Resource&& other) noexcept
+		{
+			Release();
+			return *this;
+		}
+
 		virtual ~Resource()
 		{
 			Release();
 		}
 
+		void SetData(const IBuilderBase& builder)
+		{
+			auto data = _pResourceMgr->GetResource(this, builder);
+			Release();
+			_pData = data;
+		}
+
 		void Release()
 		{
-			if (_data)
+			if (_pData)
 			{
-				if (_resourceMgr.ReleaseResource(this))
+				if (_pResourceMgr->ReleaseResource(this))
 				{
-					((Derived*)_data)->Release();
+					((Derived*)_pData)->Release();
 				}
-				_data = nullptr;
+				_pData = nullptr;
 			}
 		}
 
 		operator Derived* () const
 		{
-			return (Derived*)_data;
+			return (Derived*)_pData;
 		}
 	};
 }

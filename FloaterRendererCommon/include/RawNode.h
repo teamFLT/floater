@@ -3,6 +3,7 @@
 #include "RawMesh.h"
 #include "Camera.h"
 
+
 #include <string>
 #include <map>
 
@@ -10,10 +11,10 @@ namespace flt
 {
 	struct RawNode
 	{
-		RawNode(const std::wstring& name, Transform& transform);
+		RawNode(const std::wstring& name);
 
 		std::wstring name;
-		Transform& transform;
+		Transform transform;
 		RawMesh* mesh;
 		Camera* camera;
 

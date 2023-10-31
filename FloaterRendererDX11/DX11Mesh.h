@@ -3,6 +3,8 @@
 #include "CommonMath.h"
 #include "../FloaterRendererCommon/include/IBuilder.h"
 #include "../FloaterRendererCommon/include/Resource.h"
+#include "DX11PixelShader.h"
+#include "DX11VertexShader.h"
 
 namespace flt
 {
@@ -24,25 +26,31 @@ namespace flt
 		};
 	};
 
-	struct Mesh
+	struct DX11Mesh
 	{
-		ID3D11ShaderResourceView* texture;
-		ID3D11SamplerState* sampler;
-
+		
+		void Release();
 
 		ID3D11Buffer* vertexBuffer;
 		size_t singleVertexSize;
+
 		ID3D11Buffer* indexBuffer;
 		size_t indexCount;
+
+		ID3D11ShaderResourceView* texture;
+		ID3D11SamplerState* sampler;
+
+		//Resource<DX11VertexShader> vertexShader;
+		//Resource<DX11PixelShader> pixelShader;
 	};
 
-	template struct Resource<Mesh>;
+	template struct Resource<DX11Mesh>;
 
-	struct MeshBuilder : public IBuilder<Mesh>
+	struct MeshBuilder : public IBuilder<DX11Mesh>
 	{
-		MeshBuilder(const std::wstring name) : IBuilder<Mesh>(name), pDevice(nullptr) {}
+		MeshBuilder(const std::wstring name) : IBuilder<DX11Mesh>(name), pDevice(nullptr) {}
 
-		virtual void* build(ResourceMgr& _resourceMgr) const override;
+		virtual DX11Mesh* build() const override;
 
 		ID3D11Device* pDevice;
 	};

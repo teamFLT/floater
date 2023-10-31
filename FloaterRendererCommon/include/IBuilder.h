@@ -4,12 +4,12 @@
 
 namespace flt
 {
-	class ResourceMgr;
+	//class ResourceMgr;
 
 	struct IBuilderBase
 	{
 		IBuilderBase(const std::wstring& key) : key(key) {}
-		virtual void* operator()(std::wstring* typeName, ResourceMgr& _resourceMgr) const = 0;
+		virtual void* operator()(std::wstring* typeName) const = 0;
 		std::wstring key;
 	};
 
@@ -19,13 +19,14 @@ namespace flt
 		using type = Derived;
 
 		IBuilder(const std::wstring& key) : IBuilderBase(key) {}
-		virtual void* operator()(std::wstring* typeName, ResourceMgr& _resourceMgr) const final
+
+		virtual void* operator()(std::wstring* typeName) const final
 		{
 			*typeName = convToWstring(typeid(Derived).name());
 
-			return build(_resourceMgr);
+			return build();
 		}
 
-		virtual void* build(ResourceMgr& _resourceMgr) const = 0;
+		virtual Derived* build() const = 0;
 	};
 }

@@ -1,13 +1,23 @@
 #include "RendererDX11.h"
 #include "../FloaterUtil/include/FloaterMacro.h"
 #include "DX11VSConstantBuffer.h"
-#include "DX11PixelShader.h"
+
+#include "DX11Mesh.h"
 
 #include <DirectXColors.h>
+#include <directxtk/DDSTextureLoader.h>
+
+#include <new>
 
 #if defined(DEBUG) || defined(_DEBUG)
 #include <dxgidebug.h>
 #endif
+
+
+#pragma region testIncludes
+#include "TestBuilder.h"
+
+#pragma endregion
 
 
 #pragma comment(lib, "DXGI.lib")
@@ -184,7 +194,7 @@ bool flt::RendererDX11::Render(float deltaTime)
 
 	for (auto& node : _renderableObjects)
 	{
-		Mesh*& mesh = node->mesh;
+		DX11Mesh*& mesh = node->mesh;
 
 		if (node->mesh)
 		{
@@ -210,9 +220,18 @@ bool flt::RendererDX11::Render(float deltaTime)
 	return true;
 }
 
+bool flt::RendererDX11::RegisterObject(Renderable& renderable)
+{
+	DX11Node* node = new DX11Node(renderable.transform);
+
+	node->mesh = CreateBox();
+	return false;
+}
+
 bool flt::RendererDX11::Test()
 {
-	return false;
+	test::BuilderTester tester;
+	return tester.Test();
 }
 
 bool flt::RendererDX11::Resize(unsigned __int32 windowWidth, unsigned __int32 windowHeight)
@@ -286,7 +305,20 @@ bool flt::RendererDX11::InitDisplayInfo()
 			ASSERT(false, "디스플레이 모드 리스트 갯수 가져오기 실패");
 			return false;
 		}
-		DXGI_MODE_DESC1* dxgiModeArr = new DXGI_MODE_DESC1[displayModeNum];
+		if (displayModeNum == 0)
+		{
+			ASSERT(false, "디스플레이 모드 리스트 갯수가 0개 입니다.");
+			return false;
+		}
+
+		DXGI_MODE_DESC1* dxgiModeArr = new(std::nothrow) DXGI_MODE_DESC1[displayModeNum];
+
+		if (dxgiModeArr == nullptr)
+		{
+			ASSERT(false, "디스플레이 모드 리스트 할당 실패");
+			return false;
+		}
+
 		result = _outputs[i]->GetDisplayModeList1(DXGI_FORMAT_R8G8B8A8_UNORM, 0, &displayModeNum, dxgiModeArr);
 		if (result != S_OK)
 		{
@@ -410,12 +442,12 @@ bool flt::RendererDX11::OnResize()
 	return true;
 }
 
-void flt::RendererDX11::RenderSingleNodeRecursive(Node* node, const Matrix4f& parentMatrix)
+void flt::RendererDX11::RenderSingleNodeRecursive(DX11Node* node, const Matrix4f& parentMatrix)
 {
 	Matrix4f worldMatrix = node->transform.GetMatrix4f() * parentMatrix;
 	Matrix4f viewProjMatrix = Matrix4f::Identity();
 
-	for (auto& [name, child] :node->children)
+	for (auto& [name, child] : node->children)
 	{
 		RenderSingleNodeRecursive(child, worldMatrix);
 	}
@@ -425,7 +457,7 @@ void flt::RendererDX11::RenderSingleNodeRecursive(Node* node, const Matrix4f& pa
 		return;
 	}
 
-// 렌더링
+	// 렌더링
 	VSConstantBuffer vsConstantBuffer
 	{
 		ConvXMMatrix(worldMatrix),
@@ -440,7 +472,7 @@ bool flt::RendererDX11::SetVsConstantBuffer(ID3D11Buffer* vsConstantBuffer, void
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	HRESULT hResult = _immediateContext->Map(vsConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 
-	if(hResult != S_OK)
+	if (hResult != S_OK)
 	{
 		return false;
 	}
@@ -451,4 +483,153 @@ bool flt::RendererDX11::SetVsConstantBuffer(ID3D11Buffer* vsConstantBuffer, void
 	_immediateContext->VSSetConstantBuffers(slot, 1, &vsConstantBuffer);
 
 	return true;
+}
+
+flt::DX11Mesh* flt::RendererDX11::CreateBox()
+{
+	const std::vector<D3D11_INPUT_ELEMENT_DESC> Basic32 =
+	{
+		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
+		{"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0}
+	};
+
+	struct VertexUV
+	{
+		DirectX::XMFLOAT3 Pos;
+		DirectX::XMFLOAT2 Tex;
+	};
+
+	std::vector<VertexUV> vertcies;
+	vertcies.reserve(24);
+
+	float w = 0.5f;
+	float h = 0.5f;
+	float d = 0.5f;
+
+	vertcies.insert(vertcies.begin(),
+		{
+			VertexUV{DirectX::XMFLOAT3{-w, -h, -d}, DirectX::XMFLOAT2{0.0f, 1.0f}},
+			VertexUV{DirectX::XMFLOAT3{-w, +h, -d}, DirectX::XMFLOAT2{0.0f, 0.0f}},
+			VertexUV{DirectX::XMFLOAT3{+w, +h, -d}, DirectX::XMFLOAT2{1.0f, 0.0f}},
+			VertexUV{DirectX::XMFLOAT3{+w, -h, -d}, DirectX::XMFLOAT2{1.0f, 1.0f}},
+
+			VertexUV{DirectX::XMFLOAT3{-w, -h, +d}, DirectX::XMFLOAT2{1.0f, 1.0f}},
+			VertexUV{DirectX::XMFLOAT3{+w, -h, +d}, DirectX::XMFLOAT2{0.0f, 1.0f}},
+			VertexUV{DirectX::XMFLOAT3{+w, +h, +d}, DirectX::XMFLOAT2{0.0f, 0.0f}},
+			VertexUV{DirectX::XMFLOAT3{-w, +h, +d}, DirectX::XMFLOAT2{1.0f, 0.0f}},
+
+			VertexUV{DirectX::XMFLOAT3{-w, +h, -d}, DirectX::XMFLOAT2{0.0f, 1.0f}},
+			VertexUV{DirectX::XMFLOAT3{-w, +h, +d}, DirectX::XMFLOAT2{0.0f, 0.0f}},
+			VertexUV{DirectX::XMFLOAT3{+w, +h, +d}, DirectX::XMFLOAT2{1.0f, 0.0f}},
+			VertexUV{DirectX::XMFLOAT3{+w, +h, -d}, DirectX::XMFLOAT2{1.0f, 1.0f}},
+
+			VertexUV{DirectX::XMFLOAT3{-w, -h, -d}, DirectX::XMFLOAT2{1.0f, 1.0f}},
+			VertexUV{DirectX::XMFLOAT3{+w, -h, -d}, DirectX::XMFLOAT2{0.0f, 1.0f}},
+			VertexUV{DirectX::XMFLOAT3{+w, -h, +d}, DirectX::XMFLOAT2{0.0f, 0.0f}},
+			VertexUV{DirectX::XMFLOAT3{-w, -h, +d}, DirectX::XMFLOAT2{1.0f, 0.0f}},
+
+			VertexUV{DirectX::XMFLOAT3{-w, -h, +d}, DirectX::XMFLOAT2{0.0f, 1.0f}},
+			VertexUV{DirectX::XMFLOAT3{-w, +h, +d}, DirectX::XMFLOAT2{0.0f, 0.0f}},
+			VertexUV{DirectX::XMFLOAT3{-w, +h, -d}, DirectX::XMFLOAT2{1.0f, 0.0f}},
+			VertexUV{DirectX::XMFLOAT3{-w, -h, -d}, DirectX::XMFLOAT2{1.0f, 1.0f}},
+
+			VertexUV{DirectX::XMFLOAT3{+w, -h, -d}, DirectX::XMFLOAT2{0.0f, 1.0f}},
+			VertexUV{DirectX::XMFLOAT3{+w, +h, -d}, DirectX::XMFLOAT2{0.0f, 0.0f}},
+			VertexUV{DirectX::XMFLOAT3{+w, +h, +d}, DirectX::XMFLOAT2{1.0f, 0.0f}},
+			VertexUV{DirectX::XMFLOAT3{+w, -h, +d}, DirectX::XMFLOAT2{1.0f, 1.0f}}
+		});
+
+	std::vector<int> indices;
+	indices.reserve(36);
+	indices.insert(indices.begin(),
+		{
+			0, 1, 2,
+			0, 2, 3,
+
+			4, 5, 6,
+			4, 6, 7,
+
+			8, 9, 10,
+			8, 10, 11,
+
+			12, 13, 14,
+			12, 14, 15,
+
+			16, 17, 18,
+			16, 18, 19,
+
+			20, 21, 22,
+			20, 22, 23
+		});
+
+
+	D3D11_BUFFER_DESC vertexBufferDesc;
+	vertexBufferDesc.Usage = D3D11_USAGE_IMMUTABLE;
+	vertexBufferDesc.ByteWidth = (UINT)(sizeof(VertexUV) * vertcies.size());
+	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	vertexBufferDesc.CPUAccessFlags = 0;
+	vertexBufferDesc.MiscFlags = 0;
+	vertexBufferDesc.StructureByteStride = 0;
+
+	D3D11_SUBRESOURCE_DATA vertexData;
+	vertexData.pSysMem = &(vertcies[0]);
+	vertexData.SysMemPitch = 0;
+	vertexData.SysMemSlicePitch = 0;
+
+	ID3D11Buffer* vertexBuffer;
+	HRESULT hResult = _device->CreateBuffer(&vertexBufferDesc, &vertexData, &vertexBuffer);
+
+	if (hResult != S_OK)
+	{
+		return nullptr;
+	}
+
+	D3D11_BUFFER_DESC indexBufferDesc;
+	indexBufferDesc.Usage = D3D11_USAGE_IMMUTABLE;
+	indexBufferDesc.ByteWidth = (UINT)(sizeof(int) * indices.size());
+	indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+	indexBufferDesc.CPUAccessFlags = 0;
+	indexBufferDesc.MiscFlags = 0;
+	indexBufferDesc.StructureByteStride = 0;
+
+	D3D11_SUBRESOURCE_DATA indexData;
+	indexData.pSysMem = &(indices[0]);
+	indexData.SysMemPitch = 0;
+	indexData.SysMemSlicePitch = 0;
+
+	ID3D11Buffer* indexBuffer;
+	hResult = _device->CreateBuffer(&indexBufferDesc, &indexData, &indexBuffer);
+	if (hResult != S_OK)
+	{
+		return nullptr;
+	}
+
+	D3D11_BUFFER_DESC cbDesc;
+	cbDesc.ByteWidth = sizeof(DirectX::XMMATRIX);
+	cbDesc.Usage = D3D11_USAGE_DYNAMIC;
+	cbDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	cbDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	cbDesc.MiscFlags = 0;
+	cbDesc.StructureByteStride = 0;
+
+	ID3D11Buffer* constantBuffer;
+	hResult = _device->CreateBuffer(&cbDesc, nullptr, &constantBuffer);
+	if (hResult != S_OK)
+	{
+		return nullptr;
+	}
+
+	ID3D11Resource* texture;
+	ID3D11ShaderResourceView* textureView;
+	DirectX::CreateDDSTextureFromFile(_device.Get(), _immediateContext.Get(), L"WoodCrate01.dds", &texture, &textureView);
+
+	DX11Mesh* mesh = new DX11Mesh();
+
+	mesh->vertexBuffer = vertexBuffer;
+	mesh->indexBuffer = indexBuffer;
+	mesh->indexCount = (UINT)indices.size();
+	mesh->singleVertexSize = sizeof(VertexUV);
+	mesh->texture = textureView;
+
+	return mesh;
 }

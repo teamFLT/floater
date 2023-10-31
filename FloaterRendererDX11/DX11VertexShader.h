@@ -46,7 +46,7 @@ namespace flt
 	{
 		DX11VertexShaderBuilder(const std::wstring filePath) : IBuilder<DX11VertexShader>(filePath), pDevice(nullptr), pInputLayoutDesc(nullptr), descElementCount(0) {}
 
-		virtual void* build(ResourceMgr& _resourceMgr) const override;
+		virtual DX11VertexShader* build() const override;
 
 		ID3D11Device* pDevice;
 		const D3D11_INPUT_ELEMENT_DESC* pInputLayoutDesc;

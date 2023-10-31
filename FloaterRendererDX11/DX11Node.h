@@ -1,24 +1,24 @@
 #pragma once
 #include "../FloaterRendererCommon/include/Transform.h"
 #include "../FloaterRendererCommon/include/Camera.h"
-#include "Mesh.h"
+#include "DX11Mesh.h"
 
 #include <string>
 #include <map>
 
 namespace flt
 {
-	struct Node
+	struct DX11Node
 	{
-		Node(Transform& transform);
+		DX11Node(Transform& transform);
 
 		std::wstring name;
 		Transform& transform;
-		Mesh* mesh;
+		DX11Mesh* mesh;
 		Camera* camera;
 
 		int boneIndex;
 
-		std::multimap<std::wstring, Node*> children;
+		std::multimap<std::wstring, DX11Node*> children;
 	};
 }

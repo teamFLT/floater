@@ -13,7 +13,7 @@
 template<typename T>
 using comptr = Microsoft::WRL::ComPtr<T>;
 
-void* flt::DX11PixelShaderBuilder::build(ResourceMgr& _resourceMgr) const
+flt::DX11PixelShader* flt::DX11PixelShaderBuilder::build() const 
 {
 	if (pDevice == nullptr)
 	{

@@ -16,8 +16,12 @@ int main()
 	platform.Initialize(1280, 720, L"title", L".\\path");
 	auto renderer = platform.CreateRenderer(flt::RendererType::DX11);
 
+#pragma regine 테스트
 	while(renderer->Test())
-	{ }
+	{ 
+	
+	}
+#pragma endregion
 
 	flt::Transform transform;
 	flt::Renderable renderable(transform);

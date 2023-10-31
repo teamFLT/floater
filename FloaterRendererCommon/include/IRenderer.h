@@ -8,13 +8,12 @@ namespace flt
 	enum class RendererFlag
 	{
 		SOFTWARE = 0x0000'0001,
-		ACCELERATED = 0x0000'0002,
-
+		ACCELERATED = 0x0000'0002
 	};
 
 	struct Renderable
 	{
-		Renderable(Transform& transform) : transform(transform) {}
+		Renderable(Transform& transform) : transform(transform), name() {}
 		// 1. 그릴때 필요한것들.
 		// 2. 게임 엔진상에서 데이터를 바꾸고 싶은것들.
 
@@ -26,6 +25,7 @@ namespace flt
 
 		Transform& transform;
 		std::wstring name;
+		//bool& isEnable;
 	};
 
 	class IRenderer

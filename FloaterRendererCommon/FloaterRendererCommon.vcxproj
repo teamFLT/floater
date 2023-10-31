@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="FBXLoader.h" />
     <ClInclude Include="include\IBuilder.h" />
     <ClInclude Include="include\Camera.h" />
     <ClInclude Include="include\IRenderer.h" />
@@ -38,6 +39,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="FBXLoader.cpp" />
     <ClCompile Include="IBuilder.cpp" />
     <ClCompile Include="RawNode.cpp" />
     <ClCompile Include="Resource.cpp" />

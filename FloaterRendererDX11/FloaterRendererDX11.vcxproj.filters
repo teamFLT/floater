@@ -19,6 +19,12 @@
     <Filter Include="include">
       <UniqueIdentifier>{30128534-0d42-46fc-a73f-a0efac546311}</UniqueIdentifier>
     </Filter>
+    <Filter Include="HLSL">
+      <UniqueIdentifier>{ee09bdfc-7383-4e4b-a906-3c9092fc1dd2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Test">
+      <UniqueIdentifier>{6ce95901-f138-43f7-8884-34d64ec46fa5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CreateRenderer.cpp">
@@ -30,7 +36,7 @@
     <ClCompile Include="RenderableObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Node.cpp">
+    <ClCompile Include="DX11Node.cpp">
       <Filter>RendererResource</Filter>
     </ClCompile>
     <ClCompile Include="CommonMath.cpp">
@@ -45,6 +51,9 @@
     <ClCompile Include="DX11Mesh.cpp">
       <Filter>RendererResource</Filter>
     </ClCompile>
+    <ClCompile Include="TestBuilder.cpp">
+      <Filter>Test</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RendererDX11.h">
@@ -53,7 +62,7 @@
     <ClInclude Include="RenderableObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Node.h">
+    <ClInclude Include="DX11Node.h">
       <Filter>RendererResource</Filter>
     </ClInclude>
     <ClInclude Include="DX11Mesh.h">
@@ -86,5 +95,19 @@
     <ClInclude Include="Light.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="TestBuilder.h">
+      <Filter>Test</Filter>
+    </ClInclude>
+    <ClInclude Include="ITester.h">
+      <Filter>Test</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="CubeVS.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="CubePS.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

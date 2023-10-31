@@ -50,7 +50,8 @@ namespace flt
 				return data;
 			}
 
-			// 성공 실패 여부가 아닌 해제 여부를 반환.
+			// refCount 를 감소시키고, 0 이 되면 true를 반환.
+			// 성공 실패 여부가 아닌 리소스 해제 여부를 반환.
 			bool Release()
 			{
 				refCount--;

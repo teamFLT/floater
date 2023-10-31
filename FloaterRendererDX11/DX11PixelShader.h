@@ -22,7 +22,7 @@ namespace flt
 	{
 		DX11PixelShaderBuilder(const std::wstring filePath) : IBuilder<DX11PixelShader>(filePath), pDevice(nullptr) {}
 
-		virtual void* build(ResourceMgr& _resourceMgr) const override;
+		virtual DX11PixelShader* build() const override;
 
 		ID3D11Device* pDevice;
 	};

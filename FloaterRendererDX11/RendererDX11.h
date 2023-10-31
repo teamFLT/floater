@@ -2,7 +2,7 @@
 #include "../FloaterRendererCommon/include/IRenderer.h"
 #include "../FloaterRendererCommon/include/ResourceMgr.h"
 #include "CommonMath.h"
-#include "Node.h"
+#include "DX11Node.h"
 
 #include <windows.h>
 #include <wrl/client.h>
@@ -28,7 +28,7 @@ namespace flt
 		bool Finalize();
 
 		virtual bool Render(float deltaTime);
-		virtual bool RegisterObject(Renderable& renderable) { return false; };
+		virtual bool RegisterObject(Renderable& renderable);
 		virtual bool DeregisterObject(Renderable& renderable) { return false; };
 
 		virtual bool Test() override;
@@ -40,9 +40,14 @@ namespace flt
 		bool InitGPUInfo();
 		bool OnResize();
 
-		void RenderSingleNodeRecursive(Node* node, const Matrix4f& parentMatrix);
+		void RenderSingleNodeRecursive(DX11Node* node, const Matrix4f& parentMatrix);
 
 		bool SetVsConstantBuffer(ID3D11Buffer* vsConstantBuffer, void* pData, size_t dataSize, UINT slot);
+
+
+		// 테스트 private 함수들
+	private:
+		DX11Mesh* CreateBox();
 
 	private:
 		HWND _hwnd;
@@ -75,7 +80,7 @@ namespace flt
 		comptr<ID3D11RasterizerState> _rasterizerState;
 
 		// 그리기 위한 오브젝트
-		std::vector<Node*> _renderableObjects;
+		std::vector<DX11Node*> _renderableObjects;
 
 		// 데이터 관리를 위한 리소스 매니저
 		ResourceMgr _resourceMgr;

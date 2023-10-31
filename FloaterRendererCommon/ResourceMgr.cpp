@@ -11,7 +11,7 @@ void* flt::ResourceMgr::GetResource(ResourceBase* resource, const IBuilderBase& 
 	if (resources.find(builder.key) == resources.end())
 	{
 		std::wstring typeName;
-		data = builder(&typeName, *this);
+		data = builder(&typeName);
 		if (data == nullptr)
 		{
 			return nullptr;

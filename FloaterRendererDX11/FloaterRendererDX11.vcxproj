@@ -24,9 +24,10 @@
     <ClCompile Include="DX11PixelShader.cpp" />
     <ClCompile Include="DX11VertexShader.cpp" />
     <ClCompile Include="DX11Mesh.cpp" />
-    <ClCompile Include="Node.cpp" />
+    <ClCompile Include="DX11Node.cpp" />
     <ClCompile Include="RenderableObject.cpp" />
     <ClCompile Include="RendererDX11.cpp" />
+    <ClCompile Include="TestBuilder.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DX11PixelShader.h" />
@@ -34,13 +35,15 @@
     <ClInclude Include="DX11VertexShader.h" />
     <ClInclude Include="DX11VSConstantBuffer.h" />
     <ClInclude Include="include\CreateRenderer.h" />
+    <ClInclude Include="ITester.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="CommonMath.h" />
     <ClInclude Include="DX11Mesh.h" />
-    <ClInclude Include="Node.h" />
+    <ClInclude Include="DX11Node.h" />
     <ClInclude Include="RenderableObject.h" />
     <ClInclude Include="RendererDX11.h" />
+    <ClInclude Include="TestBuilder.h" />
     <ClInclude Include="Texture.h" />
   </ItemGroup>
   <ItemGroup>
@@ -53,6 +56,24 @@
     <ProjectReference Include="..\FloaterUtil\FloaterUtil.vcxproj">
       <Project>{cb145f87-3fe0-445e-bb70-582b466cbe74}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="CubePS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="CubeVS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+    </FxCompile>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
