@@ -16,7 +16,7 @@ int main()
 	platform.Initialize(1280, 720, L"title", L".\\path");
 	auto renderer = platform.CreateRenderer(flt::RendererType::DX11);
 
-#pragma regine 테스트
+#pragma region 테스트
 	//while(renderer->Test())
 	//{ 
 	//
@@ -24,6 +24,8 @@ int main()
 #pragma endregion
 
 	flt::Transform transform;
+	transform.SetPosition(0.0f, 0.0f, 0.7f);
+	transform.SetScale(0.5f, 0.5f, 0.5f);
 	flt::Renderable renderable(transform);
 	renderable.name = L"test";
 	renderer->RegisterObject(renderable);
@@ -38,6 +40,9 @@ int main()
 		}
 
 		renderer->Render(1.0f);
+		transform.AddRotation({ 1.0f, 0.0f, 0.0f }, 0.01f);
+		transform.AddRotation({ 0.0f, 1.0f, 0.0f }, 0.01f);
+		transform.AddRotation({ 0.0f, 0.0f, 1.0f }, 0.01f);
 
 		//if (!renderer->Render(deltaTime))
 		//{

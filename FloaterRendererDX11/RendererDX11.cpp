@@ -188,13 +188,13 @@ bool flt::RendererDX11::Render(float deltaTime)
 	// 렌더링을 시작하기 위해 초기화
 	_immediateContext->ClearRenderTargetView(_renderTargetView.Get(), DirectX::Colors::Black);
 	_immediateContext->ClearDepthStencilView(_depthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
-	//g_immediateContext->OMSetRenderTargets(1, g_renderTargetView.GetAddressOf(), g_depthStencilView.Get());
+	_immediateContext->OMSetRenderTargets(1, _renderTargetView.GetAddressOf(), _depthStencilView.Get());
 
 
 	// 각 mesh별로 들어가야하지만 일단 여기서 만들자.
 	D3D11_RASTERIZER_DESC rasterizerDesc = { };
 	rasterizerDesc.FillMode = D3D11_FILL_SOLID;
-	rasterizerDesc.CullMode = D3D11_CULL_NONE;
+	rasterizerDesc.CullMode = D3D11_CULL_BACK;
 	rasterizerDesc.FrontCounterClockwise = false;
 	rasterizerDesc.DepthBias = 0;
 	rasterizerDesc.DepthBiasClamp = 0.0f;
@@ -213,7 +213,7 @@ bool flt::RendererDX11::Render(float deltaTime)
 	{
 		DX11Mesh* mesh = static_cast<DX11Mesh*>(*node->mesh);
 
-		if (node->mesh)
+		if (!node->mesh)
 		{
 			continue;
 		}
@@ -224,8 +224,36 @@ bool flt::RendererDX11::Render(float deltaTime)
 		DirectX::XMMATRIX worldViewProj = world;
 
 		DX11VertexShader* vertexShader = static_cast<DX11VertexShader*>(mesh->vertexShader);
-		_immediateContext->IASetInputLayout(vertexShader->pInputLayout);
+		DX11PixelShader* pixelShader = static_cast<DX11PixelShader*>(mesh->pixelShader);
 
+		_immediateContext->IASetInputLayout(vertexShader->pInputLayout);
+		_immediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+		_immediateContext->VSSetShader(vertexShader->pVertexShader, nullptr, 0);
+		_immediateContext->PSSetShader(pixelShader->pPixelShader, nullptr, 0);
+
+		_immediateContext->PSSetShaderResources(0, 1, &(mesh->texture));
+
+		D3D11_MAPPED_SUBRESOURCE mappedResource = { };
+		HRESULT hResult = _immediateContext->Map(vertexShader->pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+		if (hResult != S_OK)
+		{
+			ASSERT(false, "상수 버퍼 맵핑 실패");
+			return false;
+		}
+		DirectX::XMMATRIX* data = (DirectX::XMMATRIX*)mappedResource.pData;
+		*data = worldViewProj;
+		_immediateContext->Unmap(vertexShader->pConstantBuffer, 0);
+
+		_immediateContext->VSSetConstantBuffers(0, 1, &(vertexShader->pConstantBuffer));
+
+		_immediateContext->PSSetSamplers(0, 1, &mesh->sampler);
+
+		UINT offset = 0;
+		_immediateContext->IASetVertexBuffers(0, 1, &mesh->vertexBuffer, &mesh->singleVertexSize, &offset);
+		_immediateContext->IASetIndexBuffer(mesh->indexBuffer, DXGI_FORMAT_R32_UINT, 0);
+
+		_immediateContext->DrawIndexed(mesh->indexCount, 0, 0);
 	}
 
 
@@ -245,8 +273,23 @@ bool flt::RendererDX11::Render(float deltaTime)
 bool flt::RendererDX11::RegisterObject(Renderable& renderable)
 {
 	DX11Node* node = new DX11Node(renderable.transform);
+	if (!node)
+	{
+		return false;
+	}
 
 	node->mesh = CreateBox();
+	if (!node->mesh)
+	{
+		return false;
+	}
+
+	_renderableObjects.push_back(node);
+	return true;
+}
+
+bool flt::RendererDX11::DeregisterObject(Renderable& renderable)
+{
 	return false;
 }
 

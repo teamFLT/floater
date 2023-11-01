@@ -45,7 +45,7 @@ namespace flt
 		Resource<DX11PixelShader> pixelShader;
 
 		ID3D11Buffer* vertexBuffer;
-		size_t singleVertexSize;
+		UINT singleVertexSize;
 
 		ID3D11Buffer* indexBuffer;
 		size_t indexCount;

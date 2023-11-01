@@ -29,7 +29,7 @@ namespace flt
 
 		virtual bool Render(float deltaTime);
 		virtual bool RegisterObject(Renderable& renderable);
-		virtual bool DeregisterObject(Renderable& renderable) { return false; };
+		virtual bool DeregisterObject(Renderable& renderable);
 
 		virtual bool Test() override;
 	public:
