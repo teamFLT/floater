@@ -14,7 +14,7 @@ namespace flt
 
 		std::wstring name;
 		Transform& transform;
-		DX11Mesh* mesh;
+		Resource<DX11Mesh>* mesh;
 		Camera* camera;
 
 		int boneIndex;

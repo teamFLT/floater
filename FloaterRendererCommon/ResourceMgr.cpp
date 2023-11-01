@@ -6,7 +6,7 @@ void* flt::ResourceMgr::GetResource(ResourceBase* resource, const IBuilderBase& 
 {
 	void* data = nullptr;
 
-	std::lock_guard<std::mutex> lock(mutex);
+	std::lock_guard<std::recursive_mutex> lock(resourceMutex);
 	resource->_key = builder.key;
 	if (resources.find(builder.key) == resources.end())
 	{
@@ -31,7 +31,7 @@ void* flt::ResourceMgr::GetResource(ResourceBase* resource, const IBuilderBase& 
 
 bool flt::ResourceMgr::ReleaseResource(ResourceBase* resource)
 {
-	std::lock_guard<std::mutex> lock(mutex);
+	std::lock_guard<std::recursive_mutex> lock(resourceMutex);
 	if (resources.find(resource->_key) != resources.end())
 	{
 		if (resources[resource->_key].Release())

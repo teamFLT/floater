@@ -17,10 +17,10 @@ int main()
 	auto renderer = platform.CreateRenderer(flt::RendererType::DX11);
 
 #pragma regine 테스트
-	while(renderer->Test())
-	{ 
-	
-	}
+	//while(renderer->Test())
+	//{ 
+	//
+	//}
 #pragma endregion
 
 	flt::Transform transform;

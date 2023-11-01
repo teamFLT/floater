@@ -8,6 +8,7 @@ namespace flt
 
 	struct IBuilderBase
 	{
+		IBuilderBase() = default;
 		IBuilderBase(const std::wstring& key) : key(key) {}
 		virtual void* operator()(std::wstring* typeName) const = 0;
 		std::wstring key;
@@ -18,6 +19,7 @@ namespace flt
 	{
 		using type = Derived;
 
+		IBuilder() = default;
 		IBuilder(const std::wstring& key) : IBuilderBase(key) {}
 
 		virtual void* operator()(std::wstring* typeName) const final

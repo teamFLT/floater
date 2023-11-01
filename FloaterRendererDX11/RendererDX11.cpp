@@ -5,7 +5,6 @@
 #include "DX11Mesh.h"
 
 #include <DirectXColors.h>
-#include <directxtk/DDSTextureLoader.h>
 
 #include <new>
 
@@ -192,9 +191,27 @@ bool flt::RendererDX11::Render(float deltaTime)
 	//g_immediateContext->OMSetRenderTargets(1, g_renderTargetView.GetAddressOf(), g_depthStencilView.Get());
 
 
+	// 각 mesh별로 들어가야하지만 일단 여기서 만들자.
+	D3D11_RASTERIZER_DESC rasterizerDesc = { };
+	rasterizerDesc.FillMode = D3D11_FILL_SOLID;
+	rasterizerDesc.CullMode = D3D11_CULL_NONE;
+	rasterizerDesc.FrontCounterClockwise = false;
+	rasterizerDesc.DepthBias = 0;
+	rasterizerDesc.DepthBiasClamp = 0.0f;
+	rasterizerDesc.SlopeScaledDepthBias = 0.0f;
+	rasterizerDesc.DepthClipEnable = true;
+	rasterizerDesc.ScissorEnable = false;
+	rasterizerDesc.MultisampleEnable = false;
+	rasterizerDesc.AntialiasedLineEnable = false;
+
+	Microsoft::WRL::ComPtr<ID3D11RasterizerState> rasterizerState;
+	_device->CreateRasterizerState(&rasterizerDesc, rasterizerState.GetAddressOf());
+
+	_immediateContext->RSSetState(rasterizerState.Get());
+
 	for (auto& node : _renderableObjects)
 	{
-		DX11Mesh*& mesh = node->mesh;
+		DX11Mesh* mesh = static_cast<DX11Mesh*>(*node->mesh);
 
 		if (node->mesh)
 		{
@@ -202,7 +219,12 @@ bool flt::RendererDX11::Render(float deltaTime)
 		}
 
 		// 렌더링
+		DirectX::XMMATRIX world = ConvXMMatrix(node->transform.GetMatrix4f());
 
+		DirectX::XMMATRIX worldViewProj = world;
+
+		DX11VertexShader* vertexShader = static_cast<DX11VertexShader*>(mesh->vertexShader);
+		_immediateContext->IASetInputLayout(vertexShader->pInputLayout);
 
 	}
 
@@ -485,151 +507,14 @@ bool flt::RendererDX11::SetVsConstantBuffer(ID3D11Buffer* vsConstantBuffer, void
 	return true;
 }
 
-flt::DX11Mesh* flt::RendererDX11::CreateBox()
+flt::Resource<flt::DX11Mesh>* flt::RendererDX11::CreateBox()
 {
-	const std::vector<D3D11_INPUT_ELEMENT_DESC> Basic32 =
-	{
-		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
-		{"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0}
-	};
+	DX11CubeBuilder cubeBuilder;
+	cubeBuilder.pDevice = _device.Get();
+	cubeBuilder.pImmediateContext = _immediateContext.Get();
+	cubeBuilder.pResourceMgr = &_resourceMgr;
 
-	struct VertexUV
-	{
-		DirectX::XMFLOAT3 Pos;
-		DirectX::XMFLOAT2 Tex;
-	};
+	Resource<DX11Mesh>* meshResource = new Resource<DX11Mesh>(_resourceMgr, cubeBuilder);
 
-	std::vector<VertexUV> vertcies;
-	vertcies.reserve(24);
-
-	float w = 0.5f;
-	float h = 0.5f;
-	float d = 0.5f;
-
-	vertcies.insert(vertcies.begin(),
-		{
-			VertexUV{DirectX::XMFLOAT3{-w, -h, -d}, DirectX::XMFLOAT2{0.0f, 1.0f}},
-			VertexUV{DirectX::XMFLOAT3{-w, +h, -d}, DirectX::XMFLOAT2{0.0f, 0.0f}},
-			VertexUV{DirectX::XMFLOAT3{+w, +h, -d}, DirectX::XMFLOAT2{1.0f, 0.0f}},
-			VertexUV{DirectX::XMFLOAT3{+w, -h, -d}, DirectX::XMFLOAT2{1.0f, 1.0f}},
-
-			VertexUV{DirectX::XMFLOAT3{-w, -h, +d}, DirectX::XMFLOAT2{1.0f, 1.0f}},
-			VertexUV{DirectX::XMFLOAT3{+w, -h, +d}, DirectX::XMFLOAT2{0.0f, 1.0f}},
-			VertexUV{DirectX::XMFLOAT3{+w, +h, +d}, DirectX::XMFLOAT2{0.0f, 0.0f}},
-			VertexUV{DirectX::XMFLOAT3{-w, +h, +d}, DirectX::XMFLOAT2{1.0f, 0.0f}},
-
-			VertexUV{DirectX::XMFLOAT3{-w, +h, -d}, DirectX::XMFLOAT2{0.0f, 1.0f}},
-			VertexUV{DirectX::XMFLOAT3{-w, +h, +d}, DirectX::XMFLOAT2{0.0f, 0.0f}},
-			VertexUV{DirectX::XMFLOAT3{+w, +h, +d}, DirectX::XMFLOAT2{1.0f, 0.0f}},
-			VertexUV{DirectX::XMFLOAT3{+w, +h, -d}, DirectX::XMFLOAT2{1.0f, 1.0f}},
-
-			VertexUV{DirectX::XMFLOAT3{-w, -h, -d}, DirectX::XMFLOAT2{1.0f, 1.0f}},
-			VertexUV{DirectX::XMFLOAT3{+w, -h, -d}, DirectX::XMFLOAT2{0.0f, 1.0f}},
-			VertexUV{DirectX::XMFLOAT3{+w, -h, +d}, DirectX::XMFLOAT2{0.0f, 0.0f}},
-			VertexUV{DirectX::XMFLOAT3{-w, -h, +d}, DirectX::XMFLOAT2{1.0f, 0.0f}},
-
-			VertexUV{DirectX::XMFLOAT3{-w, -h, +d}, DirectX::XMFLOAT2{0.0f, 1.0f}},
-			VertexUV{DirectX::XMFLOAT3{-w, +h, +d}, DirectX::XMFLOAT2{0.0f, 0.0f}},
-			VertexUV{DirectX::XMFLOAT3{-w, +h, -d}, DirectX::XMFLOAT2{1.0f, 0.0f}},
-			VertexUV{DirectX::XMFLOAT3{-w, -h, -d}, DirectX::XMFLOAT2{1.0f, 1.0f}},
-
-			VertexUV{DirectX::XMFLOAT3{+w, -h, -d}, DirectX::XMFLOAT2{0.0f, 1.0f}},
-			VertexUV{DirectX::XMFLOAT3{+w, +h, -d}, DirectX::XMFLOAT2{0.0f, 0.0f}},
-			VertexUV{DirectX::XMFLOAT3{+w, +h, +d}, DirectX::XMFLOAT2{1.0f, 0.0f}},
-			VertexUV{DirectX::XMFLOAT3{+w, -h, +d}, DirectX::XMFLOAT2{1.0f, 1.0f}}
-		});
-
-	std::vector<int> indices;
-	indices.reserve(36);
-	indices.insert(indices.begin(),
-		{
-			0, 1, 2,
-			0, 2, 3,
-
-			4, 5, 6,
-			4, 6, 7,
-
-			8, 9, 10,
-			8, 10, 11,
-
-			12, 13, 14,
-			12, 14, 15,
-
-			16, 17, 18,
-			16, 18, 19,
-
-			20, 21, 22,
-			20, 22, 23
-		});
-
-
-	D3D11_BUFFER_DESC vertexBufferDesc;
-	vertexBufferDesc.Usage = D3D11_USAGE_IMMUTABLE;
-	vertexBufferDesc.ByteWidth = (UINT)(sizeof(VertexUV) * vertcies.size());
-	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	vertexBufferDesc.CPUAccessFlags = 0;
-	vertexBufferDesc.MiscFlags = 0;
-	vertexBufferDesc.StructureByteStride = 0;
-
-	D3D11_SUBRESOURCE_DATA vertexData;
-	vertexData.pSysMem = &(vertcies[0]);
-	vertexData.SysMemPitch = 0;
-	vertexData.SysMemSlicePitch = 0;
-
-	ID3D11Buffer* vertexBuffer;
-	HRESULT hResult = _device->CreateBuffer(&vertexBufferDesc, &vertexData, &vertexBuffer);
-
-	if (hResult != S_OK)
-	{
-		return nullptr;
-	}
-
-	D3D11_BUFFER_DESC indexBufferDesc;
-	indexBufferDesc.Usage = D3D11_USAGE_IMMUTABLE;
-	indexBufferDesc.ByteWidth = (UINT)(sizeof(int) * indices.size());
-	indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
-	indexBufferDesc.CPUAccessFlags = 0;
-	indexBufferDesc.MiscFlags = 0;
-	indexBufferDesc.StructureByteStride = 0;
-
-	D3D11_SUBRESOURCE_DATA indexData;
-	indexData.pSysMem = &(indices[0]);
-	indexData.SysMemPitch = 0;
-	indexData.SysMemSlicePitch = 0;
-
-	ID3D11Buffer* indexBuffer;
-	hResult = _device->CreateBuffer(&indexBufferDesc, &indexData, &indexBuffer);
-	if (hResult != S_OK)
-	{
-		return nullptr;
-	}
-
-	D3D11_BUFFER_DESC cbDesc;
-	cbDesc.ByteWidth = sizeof(DirectX::XMMATRIX);
-	cbDesc.Usage = D3D11_USAGE_DYNAMIC;
-	cbDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	cbDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	cbDesc.MiscFlags = 0;
-	cbDesc.StructureByteStride = 0;
-
-	ID3D11Buffer* constantBuffer;
-	hResult = _device->CreateBuffer(&cbDesc, nullptr, &constantBuffer);
-	if (hResult != S_OK)
-	{
-		return nullptr;
-	}
-
-	ID3D11Resource* texture;
-	ID3D11ShaderResourceView* textureView;
-	DirectX::CreateDDSTextureFromFile(_device.Get(), _immediateContext.Get(), L"WoodCrate01.dds", &texture, &textureView);
-
-	DX11Mesh* mesh = new DX11Mesh();
-
-	mesh->vertexBuffer = vertexBuffer;
-	mesh->indexBuffer = indexBuffer;
-	mesh->indexCount = (UINT)indices.size();
-	mesh->singleVertexSize = sizeof(VertexUV);
-	mesh->texture = textureView;
-
-	return mesh;
+	return meshResource;
 }

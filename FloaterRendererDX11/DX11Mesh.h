@@ -28,8 +28,21 @@ namespace flt
 
 	struct DX11Mesh
 	{
+		DX11Mesh(ResourceMgr& resourceMgr, const DX11VertexShaderBuilder& vsBuilder, const DX11PixelShaderBuilder& psBuilder) :
+			vertexShader(resourceMgr, vsBuilder),
+			pixelShader(resourceMgr, psBuilder),
+			vertexBuffer(nullptr),
+			singleVertexSize(0),
+			indexBuffer(nullptr),
+			indexCount(0),
+			texture(nullptr),
+			sampler(nullptr)
+		{}
 		
 		void Release();
+
+		Resource<DX11VertexShader> vertexShader;
+		Resource<DX11PixelShader> pixelShader;
 
 		ID3D11Buffer* vertexBuffer;
 		size_t singleVertexSize;
@@ -39,19 +52,28 @@ namespace flt
 
 		ID3D11ShaderResourceView* texture;
 		ID3D11SamplerState* sampler;
-
-		//Resource<DX11VertexShader> vertexShader;
-		//Resource<DX11PixelShader> pixelShader;
 	};
 
 	template struct Resource<DX11Mesh>;
 
-	struct MeshBuilder : public IBuilder<DX11Mesh>
+	struct DX11MeshBuilder : public IBuilder<DX11Mesh>
 	{
-		MeshBuilder(const std::wstring name) : IBuilder<DX11Mesh>(name), pDevice(nullptr) {}
+		DX11MeshBuilder(const std::wstring& name) : IBuilder<DX11Mesh>(name), pDevice(nullptr), pResourceMgr(nullptr), vsBuilder(), psBuilder() {}
 
 		virtual DX11Mesh* build() const override;
 
 		ID3D11Device* pDevice;
+		ResourceMgr* pResourceMgr;
+		DX11VertexShaderBuilder vsBuilder;
+		DX11PixelShaderBuilder psBuilder;
+	};
+
+	struct DX11CubeBuilder : public DX11MeshBuilder
+	{
+		DX11CubeBuilder() : DX11MeshBuilder(L"flt::CubeBuilder"), pImmediateContext(nullptr) {}
+
+		virtual DX11Mesh* build() const override;
+
+		ID3D11DeviceContext* pImmediateContext;
 	};
 }

@@ -64,7 +64,7 @@ namespace flt
 		};
 
 		std::unordered_map<std::wstring, ManagedData> resources;
-		std::mutex mutex;
+		std::recursive_mutex resourceMutex;
 	};
 
 	//extern template class __declspec(dllexport) std::unordered_map< std::wstring, ResourceMgr::ManagedData>;

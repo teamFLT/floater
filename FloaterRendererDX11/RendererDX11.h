@@ -47,7 +47,7 @@ namespace flt
 
 		// 테스트 private 함수들
 	private:
-		DX11Mesh* CreateBox();
+		Resource<DX11Mesh>* CreateBox();
 
 	private:
 		HWND _hwnd;

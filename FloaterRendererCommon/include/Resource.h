@@ -13,9 +13,9 @@ namespace flt
 	{
 		friend class ResourceMgr;
 
-		ResourceBase(ResourceMgr& resourceMgr)	: 
-			_pResourceMgr(&resourceMgr),
-			_key(),
+		ResourceBase(ResourceMgr* pResourceMgr, const std::wstring& key)	:
+			_pResourceMgr(pResourceMgr),
+			_key(key),
 			_pData(nullptr)
 		{
 
@@ -53,7 +53,8 @@ namespace flt
 	struct Resource : ResourceBase
 	{
 	public:
-		Resource(ResourceMgr& resourceMgr, const typename IBuilder<Derived>& builder) : ResourceBase(resourceMgr) 
+		Resource() : ResourceBase(nullptr, L"") {}
+		Resource(ResourceMgr& resourceMgr, const typename IBuilder<Derived>& builder) : ResourceBase(&resourceMgr, builder.key)
 		{
 			SetData(builder);
 		}
