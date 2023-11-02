@@ -175,3 +175,35 @@ void flt::Transform::LookAt(Vector4f target)
 	_rotation = q * _rotation;
 	_rotation.Normalize();
 }
+
+bool flt::Transform::SetParent(Transform* pParent)
+{
+	// 순환 고리가 생길 수 없도록 체크
+	Transform* checkRecursive = pParent;
+	while (checkRecursive)
+	{
+		if (checkRecursive == this)
+		{
+			return false;
+		}
+		checkRecursive = checkRecursive->_pParent;
+	}
+
+	if (_pParent)
+	{
+		auto iter = std::find(_pParent->_children.begin(), _pParent->_children.end(), this);
+		if (iter != _pParent->_children.end())
+		{
+			_pParent->_children.erase(iter);
+		}
+	}
+
+	if (pParent)
+	{
+		pParent->_children.push_back(this);
+	}
+
+	_pParent = pParent;
+
+	return true;
+}
